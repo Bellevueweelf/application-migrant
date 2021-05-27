@@ -1,0 +1,63 @@
+---
+title: "MIGRATION ET PAYS CONCERNES"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(plotly)
+library(shinythemes)
+fluidPage(theme = shinytheme("journal"))
+```
+
+```{r}
+setwd("C:/Users/Weelf/Desktop/Migration et croissance")
+migration<-read.csv("migration.csv")
+croissance<-read.csv("Croissance1.csv")
+```
+
+Comparaison du Niveau de Migrant et de la Croissance
+==========
+Column {.sidebar}
+---------
+
+```{r}
+selectInput("region", "Choisir la Region Par rapport au stock de Migrant", choices = c("USA","France", "Canada","Brésil", "Chili", "UK" , "Espagne"))
+
+selectInput("var", "Choisir la Region par rapport a la croissance", choices = c("USA","France", "Canada","Brésil", "Chili", "UK" , "Espagne"))
+mainPanel("On peut constater que dans certains pays quand le nombre de migrants augmentent cela cause une diminution de la croissance ecconomique, par le fait que le mouvement migratoire augmente la population active du pays et intensifie le nombre de chomeur. Dans ce cas le gouvernement de ce pays doit prendre des politiques adequates pour y remedier. Et aussi on trouvera des cas ou il y a des pays qui pratique la politique migratoire pour augmenter la quantite de main d'oeuvre dans une activite donnee ainsi pour ce cas de figure on verra cette politique migratoire faire augmenter la croissance dans ce pays.")
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+### Comparaison Stock d'Imigrant et Croissance Economique
+
+```{r}
+renderPlotly(plot_ly(type = 'scatter', mode='lines+markers', migration, x=~migration[[input$region]], y=~croissance[[input$var]]))
+
+```
+
+### Evolution Stock de Migrant
+
+```{r}
+renderPlotly(plot_ly(type = 'scatter',mode = 'lines+markers', migration, y=~migration[[input$region]], color = 'orange'))
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Evolution de la Croissance Economique
+
+```{r}
+renderPlotly(plot_ly(type = 'scatter', mode='lines+markers', croissance, y=~croissance[[input$var]], color = 'green'))
+
+```
+
+Noms des etudiants du groupe
+================
+Application developpe par: BELLEVUE Weelf G. S. W. / DOMINIQUE Melissa Bianca
